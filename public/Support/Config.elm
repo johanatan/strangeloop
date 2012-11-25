@@ -1,3 +1,5 @@
+-- Copyright (c) 2012 - Jonathan Leonard
+--
 
 module Config where
 
