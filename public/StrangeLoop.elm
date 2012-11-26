@@ -30,8 +30,9 @@ tilt = lift snd $ foldp stepControl (Neutral, 0.0, "Tilt") tiltControls
 cameraPosition = lift3 (\z p t -> (z, p, t)) zoom pan tilt
 
 phi = 1.6180339887
-fitWidth height = (floor ((*) (toFloat height) phi))
-fitHeight width = (floor ((/) (toFloat width) phi))
+fit op dim = (floor (op (toFloat dim) phi))
+fitWidth height = fit (*) height
+fitHeight width = fit (/) width
 
 area (w,h) = w * h
 
@@ -46,7 +47,7 @@ scaleView (w,h) scale =
 generateCorridor w h scale center =
    let (nw,nh) = scaleView (w,h) scale in
    if area (nw,nh) > 1 then
-      let { c = if isNothing center then ((nw / 2),(nh / 2)) else fromJust center
+      let { c = fromMaybe ((nw / 2),(nh / 2)) center
           ; (_,_,corridor) = generateCorridor nw nh scale (Just c) } in
       (nw,nh,[ outlined black (rect nw nh c) ] ++ corridor)
    else (nw,nh,[])
