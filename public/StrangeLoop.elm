@@ -44,22 +44,34 @@ scaleView (w,h) scale =
    if area sizeByWidth < area sizeByHeight then sizeByWidth
    else sizeByHeight
 
-generateCorridor w h scale center =
+invertHoriz (x,y) =
+   (0 - x, y)
+
+invertPoly [one, two, three, four] =
+   [(invertHoriz four),(invertHoriz three),(invertHoriz two),(invertHoriz one)]
+
+generateTrapezoid w h center pan =
+   let { halfH = (h / 2)
+       ; halfW = (w / 2)
+       ; long = ((0 - halfW, 0 - halfH), ((0 - halfW), halfH))
+       ; halfWtanPan = (halfW * (tan (abs pan)))
+       ; short = ((halfW, halfH - halfWtanPan), (halfW, 0 - (halfH - halfWtanPan)))
+       ; posVertices = [(fst short), (snd short), (fst long), (snd long)]
+       ; vertices = if pan >= 0 then posVertices else (invertPoly posVertices)
+       } in
+   polygon vertices center
+
+generateCorridor w h scale pan center =
    let (nw,nh) = scaleView (w,h) scale in
    if area (nw,nh) > 1 then
       let { c = fromMaybe ((nw / 2),(nh / 2)) center
-          ; (_,_,corridor) = generateCorridor nw nh scale (Just c) } in
-      (nw,nh,[ outlined black (rect nw nh c) ] ++ corridor)
+          ; (_,_,corridor) = generateCorridor nw nh scale pan (Just c) } in
+      (nw,nh,[ outlined black (generateTrapezoid nw nh c pan) ] ++ corridor)
    else (nw,nh,[])
 
 scene (w,h) cpos =
-   let (nw,nh,corridor) = generateCorridor w h (fst cpos) Nothing in
+   let (nw,nh,corridor) = generateCorridor w h (fst cpos) (snd cpos) Nothing in
    container w h middle $ collage nw nh corridor
 
 view = lift2 scene Window.dimensions cameraPosition
-
---done = lift (\_ -> castBoolToJSBool True) view
---foreign export jsevent "finished"
---  done :: Signal JSBool
-
 main = view

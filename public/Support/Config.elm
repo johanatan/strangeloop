@@ -19,7 +19,7 @@ maxZoom = 0.9999
 ptRate = pi / 8.0   -- in radians per sec (22.5 degrees).
 ptDelta = (/) ptRate keysRate -- in radians per key sample.
 maxPt = pi / 4.0    -- positive 45 degrees.
-minPt = (-) 0 maxPt -- positive 45 degrees.
+minPt = (-) 0 maxPt -- negative 45 degrees.
 
 fps = constant (castIntToJSNumber frameRate)
 
