@@ -44,11 +44,8 @@ scaleView (w,h) scale =
    if area sizeByWidth < area sizeByHeight then sizeByWidth
    else sizeByHeight
 
-invertHoriz (x,y) =
-   (0 - x, y)
-
-invertPoly [one, two, three, four] =
-   [(invertHoriz four),(invertHoriz three),(invertHoriz two),(invertHoriz one)]
+invertHoriz (x,y) = (0 - x, y)
+invertPoly poly = List.map (\e -> (invertHoriz e)) (reverse poly)
 
 generateTrapezoid w h center pan =
    let { halfH = (h / 2)
