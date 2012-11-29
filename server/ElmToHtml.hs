@@ -60,8 +60,11 @@ elmToHtml name src =
           \a:hover {text-decoration: underline; color: rgb(234,21,122);}" :: String)
       H.body $ do
         body
+        H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("http://code.jquery.com/jquery-1.8.3.js" :: String)) $ ""
         H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("/elm-runtime.js" :: String)) $ ""
         H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("/FrameRate.js" :: String)) $ ""
         H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("/Config.js" :: String)) $ ""
+        H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("/jquery.webcam.js" :: String)) $ ""
+        H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("/Webcam.js" :: String)) $ ""
         H.script ! A.type_ "text/javascript" $ preEscapedToMarkup js
         H.script ! A.type_ "text/javascript" $ "Dispatcher.initialize()"
