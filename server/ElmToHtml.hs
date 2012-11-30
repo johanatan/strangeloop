@@ -49,6 +49,11 @@ import Network.HTTP.Base (urlEncode)
 import Language.Elm (toParts)
 import Utils
 
+script typ uri =
+   H.script ! A.type_ typ ! A.src (H.toValue (uri :: String)) $ ""
+javascript uri =
+   script "text/javascript" uri
+
 -- | Using a page title and the full source of an Elm program, compile down to
 --   a valid HTML document.
 elmToHtml :: String -> String -> H.Html
@@ -66,11 +71,11 @@ elmToHtml name src =
           \a:hover {text-decoration: underline; color: rgb(234,21,122);}" :: String)
       H.body $ do
         body
-        H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("http://code.jquery.com/jquery-1.8.3.js" :: String)) $ ""
-        H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("/elm-runtime.js" :: String)) $ ""
-        H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("/FrameRate.js" :: String)) $ ""
-        H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("/Config.js" :: String)) $ ""
-        H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("/jquery.webcam.js" :: String)) $ ""
-        H.script ! A.type_ "text/javascript" ! A.src (H.toValue ("/Webcam.js" :: String)) $ ""
+        javascript "http://code.jquery.com/jquery-1.8.3.js"
+        javascript "/elm-runtime.js"
+        javascript "/FrameRate.js"
+        javascript "/Config.js"
+        javascript "/jquery.webcam.js"
+        javascript "/Webcam.js"
         H.script ! A.type_ "text/javascript" $ preEscapedToMarkup js
         H.script ! A.type_ "text/javascript" $ "Dispatcher.initialize()"
