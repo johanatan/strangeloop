@@ -1,19 +1,44 @@
 
 $(document).ready(function() {
+   var camWidth = 320;
+   var camHeight = 240;
    $("div#content").append("<div id='webcam'></div>");
    $('div#content div canvas').parent().hide();
+   var count = 0;
+   var canvas = document.createElement("canvas");
+   canvas.setAttribute('width', camWidth);
+   canvas.setAttribute('height', camHeight);
+   var ctx = canvas.getContext("2d");
+   var img = ctx.getImageData(0, 0, camWidth, camHeight);
+   var pos = 0;
    $("#webcam").webcam({
-      width: 320,
-      height: 240,
-      mode: "callback",
+      width: camWidth,
+      height: camHeight,
+      mode: "stream",
       swffile: "/jscam.swf",
       onTick: function() {},
-      onSave: function() {},
+      onSave: function(data) {
+         var col = data.split(";");
+         for (var i = 0; i < camWidth; i++) {
+            var tmp = parseInt(col[i]);
+            img.data[pos + 0] = (tmp >> 16) & 0xff;
+            img.data[pos + 1] = (tmp >> 8) & 0xff;
+            img.data[pos + 2] = tmp & 0xff;
+            pos += 4;
+         }
+         if (pos >= 4 * camWidth * camHeight) {
+            ctx.putImageData(img, 0, 0);
+            console.log('signaling event');
+            signalEvent('webcamFrame', canvas);
+            pos = 0;
+         }
+      },
       onCapture: function() {},
       debug: function(type, string) {
          if (type === "notify" && string === "Camera started") {
             $('#webcam').hide();
             $('div#content div canvas').parent().show();
+            webcam.capture();
          }
       },
       onLoad: function() {}

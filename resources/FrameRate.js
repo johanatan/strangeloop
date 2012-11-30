@@ -1,4 +1,11 @@
 
+var signalEvent = function(eventName, value) {
+   var e = document.createEvent('Event');
+   e.initEvent(eventName, true, true);
+   e.value = value;
+   document.dispatchEvent(e);
+}
+
 var FrameRate = function() {
    var fps = 40;
    var msPerFrame = 1000 / fps;
@@ -16,13 +23,6 @@ var FrameRate = function() {
    var frameStart = startTime;
    var frameEnd   = startTime;
    var timeoutID = 0;
-
-   var signalEvent = function(eventName, value) {
-      var e = document.createEvent('Event');
-      e.initEvent(eventName, true, true);
-      e.value = value;
-      document.dispatchEvent(e);
-   }
 
    // Trigger time events to try to maintain the desired FPS.
    document.addEventListener('finished', function(evt) {
