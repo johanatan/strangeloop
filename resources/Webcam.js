@@ -24,6 +24,7 @@ $(document).ready(function() {
             img.data[pos + 0] = (tmp >> 16) & 0xff;
             img.data[pos + 1] = (tmp >> 8) & 0xff;
             img.data[pos + 2] = tmp & 0xff;
+            img.data[pos + 3] = 0xff;
             pos += 4;
          }
          if (pos >= 4 * camWidth * camHeight) {

@@ -21,7 +21,7 @@ ptDelta = (/) ptRate keysRate -- in radians per key sample.
 maxPt = pi / 4.0    -- positive 45 degrees.
 minPt = (-) 0 maxPt -- negative 45 degrees.
 
-fps = constant (castIntToJSNumber frameRate)
+fps = constant $ castIntToJSNumber frameRate
 
 foreign export jsevent "fps"
    fps :: Signal JSNumber
