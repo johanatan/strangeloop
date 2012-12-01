@@ -29,11 +29,13 @@ foreign export jsevent "fps"
 foreign import jsevent "trigger" (castIntToJSNumber 0)
    jsTime :: Signal JSNumber
 
-foreign import jsevent "webcamFrame" undefined
-   jsCanvas :: Signal JSElement
-
 time = lift castJSNumberToFloat jsTime
 delta = lift snd $ foldp (\t1 (t0, d) -> (t1, t1 - t0)) (0, 0) time
+
+foreign import jsevent "webcamFrame" (castStringToJSString "")
+   jsCanvasUrl :: Signal JSString
+
+webcamFrame = dropIf (\s -> s == "") $ lift castJSStringToString jsCanvasUrl
 
 data Control = Positive | Neutral | Negative
 data KeyInput = KeyInput Bool Control Control Control

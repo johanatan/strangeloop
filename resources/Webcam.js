@@ -28,15 +28,14 @@ $(document).ready(function() {
          }
          if (pos >= 4 * camWidth * camHeight) {
             ctx.putImageData(img, 0, 0);
-            console.log('signaling event');
-            signalEvent('webcamFrame', canvas);
+            signalEvent('webcamFrame', canvas.toDataURL());
             pos = 0;
          }
       },
       onCapture: function() {},
       debug: function(type, string) {
          if (type === "notify" && string === "Camera started") {
-            $('#webcam').hide();
+            $('#webcam').offset({ top: 0, left: -1 - camWidth });
             $('div#content div canvas').parent().show();
             webcam.capture();
          }
