@@ -71,4 +71,4 @@ scene (w,h) cpos =
    container w h middle $ collage nw nh corridor
 
 view = lift2 scene Window.dimensions cameraPosition
-main = lift view
+main = view
