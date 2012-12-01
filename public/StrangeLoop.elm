@@ -63,7 +63,7 @@ generateCorridor w h scale pan center =
    if area (nw,nh) > 1 then
       let { c = fromMaybe ((nw / 2),(nh / 2)) center
           ; (_,_,corridor) = generateCorridor nw nh scale pan (Just c) } in
-      (nw,nh,[ textured webcamFrame (generateTrapezoid nw nh c pan) ] ++ corridor)
+      (nw,nh,[ textured frames (generateTrapezoid nw nh c pan) ] ++ corridor)
    else (nw,nh,[])
 
 scene (w,h) cpos =
