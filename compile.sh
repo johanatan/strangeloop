@@ -1,6 +1,6 @@
 pushd public/Support 1>/dev/null
 rm *.js 2>/dev/null
-elm -o *.elm
+elm --only-js *.elm
 mv *.js ../../resources
 popd 1>/dev/null
 cd server
