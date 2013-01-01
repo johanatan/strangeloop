@@ -29,7 +29,11 @@ $(document).ready(function() {
          }
          if (pos >= 4 * camWidth * camHeight) {
             ctx.putImageData(img, 0, 0);
-            signalEvent('webcamFrame', canvas.toDataURL());
+            var data = canvas.toDataURL();
+            var chunkSize = Math.ceil(data.length / 10);
+            for (i = 0; i < data.length; i += chunkSize) {
+               signalEvent('webcamFrame', data.substring(i, i + chunkSize));
+            }
             pos = 0;
          }
       },

@@ -35,7 +35,13 @@ delta = lift snd $ foldp (\t1 (t0, d) -> (t1, t1 - t0)) (0, 0) time
 foreign import jsevent "webcamFrame" (castStringToJSString "")
    jsCanvasUrl :: Signal JSString
 
-webcamFrame = dropIf (\s -> s == "") $ lift castJSStringToString jsCanvasUrl
+frameChunks = lift castJSStringToString jsCanvasUrl
+frameComplete chunkCount = (chunkCount `mod` 10) == 0
+concatChunk chunk (frame, count) =
+   let c = count + 1 in
+   if frameComplete count then (chunk, c)
+   else (frame ++ chunk, c)
+frames = lift fst $ keepIf (\(frame, count) -> frameComplete count) ("", 0) $ foldp' concatChunk (\c -> (c, 1)) frameChunks
 
 data Control = Positive | Neutral | Negative
 data KeyInput = KeyInput Bool Control Control Control
